@@ -1,0 +1,7 @@
+version: '3.4'
+services:
+  dockordbot:
+    image: ${DOCKER_REGISTRY-}dockordbot
+    build:
+      context: .
+      dockerfile: WebClients/Dockord/Dockord.Bot/Dockerfile

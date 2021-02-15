@@ -1,7 +1,18 @@
 {
   "profiles": {
     "Dockord.Bot": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+        //, "Serilog__SeqUrl": "http://localhost:5340/"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+        //, "Serilog__SeqUrl": "http://localhost:5340/"
+      }
     }
   }
 }
