@@ -5,3 +5,6 @@ services:
     build:
       context: .
       dockerfile: WebClients/Dockord/Dockord.Bot/Dockerfile
+      
+  seq:
+    image: datalust/seq:latest

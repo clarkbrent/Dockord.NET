@@ -1,6 +1,20 @@
-version: '3.4'
+﻿version: '3.4'
 services:
   dockordbot:
     environment:
       - DOTNET_ENVIRONMENT=Development
+      - Serilog__MinimumLevel__Default=Debug
+      - Serilog__SeqUrl=http://seq
+      - BotSettings__AlwaysCacheMembers=true
+      - BotSettings__MessageCacheSize=1024
+      - BotSettings__Prefix=!
+      - BotSettings__Token=
+    depends_on:
+        - seq
         
+  seq:
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "5340:80"
+      
