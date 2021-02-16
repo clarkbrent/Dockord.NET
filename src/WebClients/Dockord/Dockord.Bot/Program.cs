@@ -23,10 +23,10 @@ namespace Dockord.Bot
                 Log.Information($"Configuring app ({{{nameof(_appName)}}})...", _appName);
                 IHost host = CreateHostBuilder().Build();
 
-                ILooperService looperService = host.Services.GetService<ILooperService>();
+                IBotService bot = host.Services.GetService<IBotService>();
 
                 Log.Information($"Starting app ({{{nameof(_appName)}}})...", _appName);
-                looperService.Run();
+                await bot.RunAsync();
 
                 await Task.Delay(-1); // Run app forever
             }

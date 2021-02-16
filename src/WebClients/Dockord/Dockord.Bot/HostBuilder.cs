@@ -14,7 +14,7 @@ namespace Dockord.Bot
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IDockordConfig, DockordConfig>();
-                    services.AddTransient<ILooperService, LooperService>();
+                    services.AddSingleton<IBotService, BotService>();
                 })
                 .UseSerilog();
     }
