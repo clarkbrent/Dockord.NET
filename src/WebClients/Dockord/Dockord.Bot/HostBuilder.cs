@@ -1,4 +1,5 @@
 ﻿using Dockord.Bot.Configuration;
+using Dockord.Bot.Events;
 using Dockord.Bot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,6 +15,8 @@ namespace Dockord.Bot
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<IDockordConfig, DockordConfig>();
+                    services.AddSingleton<IClientEventHandler, ClientEventHandler>();
+                    services.AddSingleton<ICommandEventHandler, CommandEventHandler>();
                     services.AddSingleton<IBotService, BotService>();
                 })
                 .UseSerilog();

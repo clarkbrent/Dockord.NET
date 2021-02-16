@@ -21,9 +21,11 @@ namespace Dockord.Bot
             try
             {
                 Log.Information($"Configuring app ({{{nameof(_appName)}}})...", _appName);
-                IHost host = CreateHostBuilder().Build();
+                IHost host = CreateHostBuilder().Build()
+                    ?? throw new NullReferenceException("Host was null or empty."); ;
 
-                IBotService bot = host.Services.GetService<IBotService>();
+                IBotService bot = host.Services.GetService<IBotService>()
+                    ?? throw new NullReferenceException("Bot service was null or empty.");
 
                 Log.Information($"Starting app ({{{nameof(_appName)}}})...", _appName);
                 await bot.RunAsync();
