@@ -1,13 +1,9 @@
-﻿using Dockord.Bot.Configuration;
-using Dockord.Bot.Events;
+﻿using Dockord.Bot.Events;
 using Dockord.Bot.Modules;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
-using DSharpPlus.Interactivity;
-using DSharpPlus.Interactivity.Enums;
 using DSharpPlus.Interactivity.Extensions;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using System;
 using System.Threading.Tasks;
 
@@ -15,84 +11,58 @@ namespace Dockord.Bot.Services
 {
     class BotService : IBotService
     {
-        private readonly IDockordConfig _config;
         private readonly ILogger<BotService> _logger;
-        private readonly IServiceProvider _services;
-        private readonly IClientEventHandler _clientEventHandler;
-        private readonly ICommandEventHandler _commandEventHandler;
+        private readonly IUtilityService _utilityService;
+        private readonly IEventService _eventService;
 
-        public BotService(IDockordConfig config, ILogger<BotService> logger, IServiceProvider services,
-            IClientEventHandler clientEventHandler, ICommandEventHandler commandEventHandler)
+        public BotService(ILogger<BotService> logger, IEventService eventService, IUtilityService utilityService)
         {
-            _config = config;
             _logger = logger;
-            _services = services;
-            _clientEventHandler = clientEventHandler;
-            _commandEventHandler = commandEventHandler;
+            _eventService = eventService;
+            _utilityService = utilityService;
+
+            Client = SetClient();
+            Commands = SetCommands();
         }
 
-        public DiscordClient? Client { get; private set; }
-        public CommandsNextExtension? Commands { get; private set; }
+        public DiscordClient Client { get; private set; }
+        public CommandsNextExtension Commands { get; private set; }
 
         public async Task RunAsync()
         {
-            SetupClient();
-            if (Client == null)
-                throw new NullReferenceException("Failed to setup Discord client.");
-
-            SetupCommands();
-            if (Commands == null)
-                throw new NullReferenceException("Failed to setup Discord commands.");
-
+            _logger.LogInformation(DockordEvents.BotClientStarting, "Starting bot...");
             await Client.ConnectAsync();
+
+            await Task.Delay(-1); // Run bot forever
         }
 
-        private void SetupClient()
+        private DiscordClient SetClient()
         {
-            _logger.LogInformation(DockordEvents.BotClientConfiguring, "Configuring Discord client.");
+            _logger.LogInformation(DockordEvents.BotClientConfig, "Configuring bot client...");
 
-            var discordConfig = new DiscordConfiguration
-            {
-                AlwaysCacheMembers = _config.BotSettings.AlwaysCacheMembers ?? default,
-                AutoReconnect = true,
-                Intents = DiscordIntents.AllUnprivileged,
-                LoggerFactory = new LoggerFactory().AddSerilog(Log.Logger),
-                MessageCacheSize = _config.BotSettings.MessageCacheSize ?? default,
-                MinimumLogLevel = _config.GetMinimumLogLevel(),
-                Token = _config.BotSettings.Token,
-                TokenType = TokenType.Bot,
-            };
+            var client = new DiscordClient(config: _utilityService.GetDiscordConfg())
+                ?? throw new InvalidOperationException("Failed to configure bot client.");
 
-            Client = new DiscordClient(discordConfig);
+            _eventService.SetupClientEventHandlers(client);
 
-            Client.ClientErrored += _clientEventHandler.ClientError;
-            Client.Ready += _clientEventHandler.ClientReady;
-            Client.GuildAvailable += _clientEventHandler.GuildAvailable;
+            client.UseInteractivity(configuration: _utilityService.GetInteractivityConfig());
 
-            Client.UseInteractivity(new InteractivityConfiguration
-            {
-                PollBehaviour = PollBehaviour.KeepEmojis,
-                Timeout = TimeSpan.FromMinutes(2),
-            });
+            return client;
         }
 
-        private void SetupCommands()
+        private CommandsNextExtension SetCommands()
         {
-            var commandConfig = new CommandsNextConfiguration
-            {
-                StringPrefixes = new[] { _config.BotSettings.Prefix },
-                EnableDms = true,
-                DmHelp = true,
-                Services = _services,
-            };
+            _logger.LogInformation(DockordEvents.BotCmdsConfig, "Configuring bot commands...");
 
-            Commands = Client.UseCommandsNext(commandConfig);
+            CommandsNextExtension commands = Client.UseCommandsNext(cfg: _utilityService.GetCommandsConfig())
+                ?? throw new InvalidOperationException("Failed to configure bot commands.");
 
-            Commands.CommandErrored += _commandEventHandler.CommandErrored;
-            Commands.CommandExecuted += _commandEventHandler.CommandExecuted;
+            _eventService.SetupCommandEventHandlers(commands);
 
-            Commands.RegisterCommands<BasicCommands>();
-            Commands.RegisterCommands<InteractivityCommands>();
+            commands.RegisterCommands<BasicCommands>();
+            commands.RegisterCommands<InteractivityCommands>();
+
+            return commands;
         }
     }
 }

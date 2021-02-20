@@ -10,31 +10,28 @@ namespace Dockord.Bot
 {
     partial class Program
     {
-        private static readonly string _namespace = typeof(Program).Namespace!;
-        private static readonly string _appName = _namespace[(_namespace.LastIndexOf('.', _namespace.LastIndexOf('.') - 1) + 1)..];
-
         private static async Task Main()
         {
+            string nameSpace = typeof(Program).Namespace!;
+            string appName = nameSpace[(nameSpace.LastIndexOf('.', nameSpace.LastIndexOf('.') - 1) + 1)..];
+
             IConfiguration config = CreateConfigBuilder().Build();
             Log.Logger = SetupLogger(config).CreateLogger();
 
             try
             {
-                Log.Information($"Configuring app ({{{nameof(_appName)}}})...", _appName);
+                Log.Information($"Configuring app ({{{nameof(appName)}}})...", appName);
                 IHost host = CreateHostBuilder().Build()
-                    ?? throw new NullReferenceException("Host was null or empty."); ;
+                    ?? throw new InvalidOperationException("An error occured while configuring the host.");
 
                 IBotService bot = host.Services.GetService<IBotService>()
-                    ?? throw new NullReferenceException("Bot service was null or empty.");
+                    ?? throw new InvalidOperationException("Bot service could not be found.");
 
-                Log.Information($"Starting app ({{{nameof(_appName)}}})...", _appName);
                 await bot.RunAsync();
-
-                await Task.Delay(-1); // Run app forever
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, $"Program terminated unexpectedly ({{{nameof(_appName)}}})!", _appName);
+                Log.Fatal(ex, $"{{{nameof(appName)}}} terminated unexpectedly!", appName);
             }
             finally
             {

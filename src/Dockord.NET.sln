@@ -18,6 +18,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dockord.Bot", "WebClients\Dockord\Dockord.Bot\Dockord.Bot.csproj", "{D14A815E-720B-4AF1-B142-75766349B65E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dockord.Library", "WebClients\Dockord\Dockord.Library\Dockord.Library.csproj", "{EC5CAF5C-B319-4095-AC6A-A0943EB4082C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{D14A815E-720B-4AF1-B142-75766349B65E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D14A815E-720B-4AF1-B142-75766349B65E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D14A815E-720B-4AF1-B142-75766349B65E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC5CAF5C-B319-4095-AC6A-A0943EB4082C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC5CAF5C-B319-4095-AC6A-A0943EB4082C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC5CAF5C-B319-4095-AC6A-A0943EB4082C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC5CAF5C-B319-4095-AC6A-A0943EB4082C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E2B62374-6667-4829-A7D2-A6BE90F50B2C} = {7FA288C1-8408-4902-A93A-A8F0ECF043B8}
 		{D14A815E-720B-4AF1-B142-75766349B65E} = {E2B62374-6667-4829-A7D2-A6BE90F50B2C}
+		{EC5CAF5C-B319-4095-AC6A-A0943EB4082C} = {E2B62374-6667-4829-A7D2-A6BE90F50B2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8D6618B6-FE28-425F-8F88-61F461427A44}

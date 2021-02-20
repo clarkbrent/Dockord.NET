@@ -6,7 +6,6 @@ namespace Dockord.Bot.Configuration
     {
         BotSettingsOptions BotSettings { get; }
         SerilogOptions Serilog { get; }
-        int? LoopAmount { get; }
 
         LogLevel GetMinimumLogLevel();
     }

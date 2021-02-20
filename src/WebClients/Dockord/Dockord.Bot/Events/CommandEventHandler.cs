@@ -1,3 +1,5 @@
+﻿using Dockord.Library.Extensions;
+using Dockord.Library.Models;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Exceptions;
 using DSharpPlus.Entities;
@@ -8,85 +10,89 @@ namespace Dockord.Bot.Events
 {
     class CommandEventHandler : ICommandEventHandler
     {
-        private string _commandName = "<unknown command>";
-
-        public CommandEventHandler()
-        {
-        }
+        private string? _commandName;
+        private string? _commandArgs;
+        private bool? _isDirectMessage;
 
         public Task CommandExecuted(CommandsNextExtension sender, CommandExecutionEventArgs e)
         {
-            var username = $"{e.Context.User?.Username ?? "<unknown username>"}#{e.Context.User?.Discriminator ?? "<unknown descriminator>"}";
+            _commandName = e.Command.QualifiedName;
+            _commandArgs = e.Context.RawArgumentString;
+            EventId eventId = DockordEvents.BotCmdsExec;
 
-            e.Context.Client.Logger.LogInformation(DockordEvents.DiscordCmdExec,
-                "{UserName} ({UserId}) successfully executed {Command}.",
-                username,
-                e.Context.User?.Id ?? null,
-                e.Command.QualifiedName);
+            LogCommandEvent(e, eventId, eventMessage: "Command executed successfully.");
 
             return Task.CompletedTask;
         }
 
         public async Task CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
         {
-            _commandName = e.Command.QualifiedName ?? "<unknown command>";
+            _commandName = e.Command.QualifiedName;
+            _commandArgs = e.Context.RawArgumentString;
+            _isDirectMessage = e.Context.Channel?.IsPrivate;
 
-            // Check if the error is from a result of lack of required permissions
+            // Check if the error is from a lack of required permissions
             if (e.Exception is ChecksFailedException)
             {
-                LogCommandError(e, "User lacked required permissions for command.");
-                await SendCommandErrorMessage(e, "You do not have the required permissions to execute this command");
+                EventId eventId = DockordEvents.BotCmdsAuthError;
+                LogCommandEvent(e, eventId, eventMessage: "User lacked required permissions for command.");
+
+                await SendErrorResponse(e,
+                                        title: "Access denied",
+                                        description: "You do not have the required permissions to execute this command.");
             }
             else
             {
-                LogCommandError(e);
-                await SendCommandErrorMessage(e, "There was an unspecified error while executing the command");
+                EventId eventId = DockordEvents.BotCmdsError;
+                LogCommandEvent(e, eventId, eventMessage: "Error executing command.");
+
+                await SendErrorResponse(e,
+                                        title: "Error occurred",
+                                        description: "There was an unspecified error while executing the command.");
             }
         }
 
-        private async Task SendCommandErrorMessage(CommandErrorEventArgs e, string message)
+        private void LogCommandEvent(CommandEventArgs e, EventId eventId, string eventMessage = "")
         {
-            var emoji = DiscordEmoji.FromName(e.Context.Client, ":no_entry:");
-            var embed = new DiscordEmbedBuilder
+            var eventData = new DiscordEventDataModel
             {
-                Title = "Access denied",
-                Description = $"{emoji} {message}: `{_commandName}`",
-                Color = DiscordColor.DarkRed
+                CommandName = _commandName,
+                CommandArgs = _commandArgs,
+                Username = e.Context.User?.Username,
+                UserDiscriminator = e.Context.User?.Discriminator,
+                UserId = e.Context.User?.Id,
+                ChannelName = e.Context.Channel?.Name,
+                ChannelId = e.Context.Channel?.Id,
+                IsDirectMessage = _isDirectMessage,
+                GuildName = e.Context.Guild?.Name,
+                GuildId = e.Context.Guild?.Id,
             };
 
-            if (e.Context.User is DiscordMember user)
-            {
-                await user.SendMessageAsync(embed.Build());
-            }
+            (string message, object[] args) = eventData.ToEventLogTuple(eventMessage);
+
+            if (e is CommandErrorEventArgs ev)
+                e.Context.Client.Logger.LogError(eventId, ev.Exception, message, args);
             else
-            {
-                await e.Context.RespondAsync(embed);
-            }
+                e.Context.Client.Logger.LogInformation(eventId, message, args);
         }
 
-        private void LogCommandError(CommandErrorEventArgs e, string message = "")
+        private async Task SendErrorResponse(CommandErrorEventArgs e, string title, string description)
         {
-            var username = $"{e.Context.User?.Username ?? "<unknown username>"}#{e.Context.User?.Discriminator ?? "<unknown descriminator>"}";
-            var channelIsDM = e.Context.Channel?.IsPrivate ?? false;
-            var logStack = "{ExceptionType}: {ExceptionMessage} {ChannelId} {ChannelName} {ChannelIsDM} {GuildId} {GuildName}";
+            var emoji = DiscordEmoji.FromName(e.Context.Client, ":no_entry:");
+            var embed = new DiscordEmbedBuilder()
+                .WithTitle(title)
+                .WithDescription($"{emoji} {description}")
+                .WithColor(DiscordColor.Red)
+                .AddField("Command:", $"`{_commandName} {_commandArgs}`")
+                .Build();
 
-            var eventId = e.Exception is ChecksFailedException
-                ? DockordEvents.BotCmdsAuthError
-                : DockordEvents.BotCmdsError;
+            if (e.Context.User is DiscordMember user)
+                await user.SendMessageAsync(embed);
+            else
+                await e.Context.RespondAsync(embed);
 
-            e.Context.Client.Logger.LogError(eventId,
-                e.Exception,
-                $"{{UserName}} ({{UserId}}) tried executing {{Command}}. {message} {logStack}",
-                username,
-                e.Context.User?.Id ?? 0,
-                _commandName,
-                e.Exception.GetType(),
-                e.Exception.Message ?? "<no message>",
-                e.Context.Channel?.Id ?? 0,
-                e.Context.Channel?.Name ?? "<unknown channel>",
-                channelIsDM,
-                e.Context.Guild?.Id ?? 0,
-                e.Context.Guild?.Name ?? "<unknown guild>");
+            if (_isDirectMessage == false)
+                await e.Context.Message.DeleteAsync(); // Cleanup invalid command if it is not a DM to bot
         }
     }
 }

@@ -8,6 +8,10 @@ namespace Dockord.Bot
 {
     partial class Program
     {
+        /// <summary>
+        /// Creates a project specific <see cref="IConfigurationBuilder"/>.
+        /// </summary>
+        /// <returns><see cref="IConfigurationBuilder"/></returns>
         private static IConfigurationBuilder CreateConfigBuilder()
         {
             string currentEnvironment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production";
@@ -19,6 +23,10 @@ namespace Dockord.Bot
                           .AddEnvironmentVariables();
         }
 
+        /// <summary>
+        /// Creates a project specific Serilog <see cref="LoggerConfiguration"/>.
+        /// </summary>
+        /// <returns><see cref="LoggerConfiguration"/></returns>
         private static LoggerConfiguration SetupLogger(IConfiguration config)
         {
             var dockordConfig = new DockordConfig(config);

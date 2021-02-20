@@ -3,6 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Dockord.Bot.Configuration
 {
+    /// <summary>
+    /// Creates strongly typed configuration values from <see cref="IConfiguration"/>.
+    /// </summary>
     class DockordConfig : BaseConfig, IDockordConfig
     {
         private readonly IConfiguration _config;
@@ -22,7 +25,6 @@ namespace Dockord.Bot.Configuration
 
         public SerilogOptions Serilog => _serilogOptions;
         public BotSettingsOptions BotSettings => _botSettings;
-        public int? LoopAmount => int.Parse(_config[nameof(LoopAmount)]);
 
         public LogLevel GetMinimumLogLevel()
         {
