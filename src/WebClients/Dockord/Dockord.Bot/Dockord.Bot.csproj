@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<TargetFramework>net5.0</TargetFramework>
 		<UserSecretsId>9b527d4e-2a43-4472-ac01-54031fce1d02</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<AssemblyName>Dockord.Bot</AssemblyName>
@@ -9,6 +9,8 @@
 		<Nullable>enable</Nullable>
 		<OutputType>Exe</OutputType>
 		<DockerfileContext>..\..\..</DockerfileContext>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>5.0</AnalysisLevel>
 	</PropertyGroup>
 
 	<ItemGroup>
