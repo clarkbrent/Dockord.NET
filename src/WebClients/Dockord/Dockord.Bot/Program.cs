@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot
 {
-    partial class Program
+    internal partial class Program
     {
         private static async Task Main()
         {
@@ -27,7 +27,7 @@ namespace Dockord.Bot
                 IBotService bot = host.Services.GetService<IBotService>()
                     ?? throw new InvalidOperationException("Bot service could not be found.");
 
-                await bot.RunAsync();
+                await bot.RunAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {

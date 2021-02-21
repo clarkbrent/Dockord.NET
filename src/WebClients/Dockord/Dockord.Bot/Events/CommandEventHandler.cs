@@ -1,4 +1,4 @@
-﻿using Dockord.Library.Extensions;
+using Dockord.Library.Extensions;
 using Dockord.Library.Models;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Exceptions;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Events
 {
-    class CommandEventHandler : ICommandEventHandler
+    public class CommandEventHandler : ICommandEventHandler
     {
         private string? _commandName;
         private string? _commandArgs;
@@ -18,7 +18,7 @@ namespace Dockord.Bot.Events
         {
             _commandName = e.Command.QualifiedName;
             _commandArgs = e.Context.RawArgumentString;
-            EventId eventId = DockordEvents.BotCmdsExec;
+            EventId eventId = DockordEventId.BotCmdExec;
 
             LogCommandEvent(e, eventId, eventMessage: "Command executed successfully.");
 
@@ -30,31 +30,34 @@ namespace Dockord.Bot.Events
             _commandName = e.Command.QualifiedName;
             _commandArgs = e.Context.RawArgumentString;
             _isDirectMessage = e.Context.Channel?.IsPrivate;
+            EventId eventId = DockordEventId.BotCmdError;
 
             // Check if the error is from a lack of required permissions
             if (e.Exception is ChecksFailedException)
             {
-                EventId eventId = DockordEvents.BotCmdsAuthError;
+                eventId = DockordEventId.BotCmdAuthError;
                 LogCommandEvent(e, eventId, eventMessage: "User lacked required permissions for command.");
 
                 await SendErrorResponse(e,
                                         title: "Access denied",
-                                        description: "You do not have the required permissions to execute this command.");
+                                        description: "You do not have the required permissions to execute this command.")
+                      .ConfigureAwait(false);
             }
             else
             {
-                EventId eventId = DockordEvents.BotCmdsError;
+                EventId eventId = DockordEventId.BotCmdError;
                 LogCommandEvent(e, eventId, eventMessage: "Error executing command.");
 
                 await SendErrorResponse(e,
                                         title: "Error occurred",
-                                        description: "There was an unspecified error while executing the command.");
+                                        description: "There was an unspecified error while executing the command.")
+                      .ConfigureAwait(false);
             }
         }
 
         private void LogCommandEvent(CommandEventArgs e, EventId eventId, string eventMessage = "")
         {
-            var eventData = new DiscordEventDataModel
+            IDiscordEventDataModel eventData = new DiscordEventDataModel
             {
                 CommandName = _commandName,
                 CommandArgs = _commandArgs,
@@ -70,8 +73,8 @@ namespace Dockord.Bot.Events
 
             (string message, object[] args) = eventData.ToEventLogTuple(eventMessage);
 
-            if (e is CommandErrorEventArgs ev)
-                e.Context.Client.Logger.LogError(eventId, ev.Exception, message, args);
+            if (e is CommandErrorEventArgs commandError)
+                e.Context.Client.Logger.LogError(eventId, commandError.Exception, message, args);
             else
                 e.Context.Client.Logger.LogInformation(eventId, message, args);
         }
@@ -87,9 +90,9 @@ namespace Dockord.Bot.Events
                 .Build();
 
             if (e.Context.User is DiscordMember user)
-                await user.SendMessageAsync(embed);
+                await user.SendMessageAsync(embed).ConfigureAwait(false);
             else
-                await e.Context.RespondAsync(embed);
+                await e.Context.RespondAsync(embed).ConfigureAwait(false);
 
             if (_isDirectMessage == false)
                 await e.Context.Message.DeleteAsync(); // Cleanup invalid command if it is not a DM to bot

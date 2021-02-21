@@ -1,4 +1,4 @@
 ﻿namespace Dockord.Bot.Configuration
 {
-    abstract class BaseConfig { }
+    public abstract class BaseConfig { }
 }

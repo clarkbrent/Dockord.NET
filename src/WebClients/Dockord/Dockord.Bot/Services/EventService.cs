@@ -7,7 +7,7 @@ namespace Dockord.Bot.Services
     /// <summary>
     /// Initializes event handlers for various Dockord, and DSharpPlus events.
     /// </summary>
-    class EventService : IEventService
+    internal class EventService : IEventService
     {
         private readonly IClientEventHandler _clientEventHandler;
         private readonly ICommandEventHandler _commandEventHandler;
@@ -30,5 +30,11 @@ namespace Dockord.Bot.Services
             commands.CommandErrored += _commandEventHandler.CommandErrored;
             commands.CommandExecuted += _commandEventHandler.CommandExecuted;
         }
+    }
+
+    internal interface IEventService
+    {
+        void SetupClientEventHandlers(DiscordClient client);
+        void SetupCommandEventHandlers(CommandsNextExtension commands);
     }
 }

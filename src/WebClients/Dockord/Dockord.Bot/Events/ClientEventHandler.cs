@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Events
 {
-    class ClientEventHandler : IClientEventHandler
+    public class ClientEventHandler : IClientEventHandler
     {
         public Task ClientReady(DiscordClient client, ReadyEventArgs e)
         {
-            client.Logger.LogInformation(DockordEvents.BotClientReady,
+            client.Logger.LogInformation(DockordEventId.BotClientReady,
                 "Bot is now ready to process events.");
 
             return Task.CompletedTask;
@@ -28,7 +28,7 @@ namespace Dockord.Bot.Events
 
             (string message, object[] args) = clientError.ToEventLogTuple(message: "Discord client error occurred.");
 
-            client.Logger.LogError(DockordEvents.BotClientError, e.Exception, message, args);
+            client.Logger.LogError(DockordEventId.BotClientError, e.Exception, message, args);
 
             return Task.CompletedTask;
         }
@@ -43,7 +43,7 @@ namespace Dockord.Bot.Events
 
             (string message, object[] args) = guildAvailable.ToEventLogTuple(message: "Guild available.");
 
-            client.Logger.LogInformation(DockordEvents.BotClientGuildAvailable, message, args);
+            client.Logger.LogInformation(DockordEventId.BotClientGuildAvailable, message, args);
 
             return Task.CompletedTask;
         }

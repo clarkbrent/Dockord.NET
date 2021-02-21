@@ -4,11 +4,11 @@
     /// A model of properties that store the values of various Discord events.
     /// </summary>
     /// <remarks>
-    /// The order that <see cref="DiscordEventDataModel"/>'s public properties are defined 
+    /// The order that <see cref="DiscordEventDataModel"/>'s public properties are defined
     /// determines the order in which log template <see cref="string"/> parameters  <br />
     /// are generated using <see cref="Extensions.DiscordEventDataExtensions.ToEventLogTuple"/>.
     /// </remarks>
-    public class DiscordEventDataModel : ICommandErrorEventModel
+    public class DiscordEventDataModel : IDiscordEventDataModel
     {
         private string _commandName = "";
         private string _username = "";

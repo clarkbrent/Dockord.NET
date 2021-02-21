@@ -2,15 +2,15 @@
 
 namespace Dockord.Bot.Events
 {
-    /// <summary>Static Dockord <see cref="EventId"/> library.</summary>
+    /// <summary>Library of static Dockord related <see cref="EventId"/>'s.</summary>
     /// <remarks>
     /// <para>
     /// <see cref="EventId.Id"/> should represent a subset of events followed by an equivalent HTTP status code similar to the operation the event is referencing. <br />
-    /// i.e.; "1400" correlates to "1" representing the "BotClient" subset of events, 
+    /// i.e.; "1400" correlates to "1" representing the "BotClient" subset of events,
     /// and "400" representing an error status code.
     /// </para>
     /// </remarks>
-    public static class DockordEvents
+    public static class DockordEventId
     {
         #region BotClient
 
@@ -24,10 +24,10 @@ namespace Dockord.Bot.Events
 
         #region BotCommands
 
-        public static EventId BotCmdsConfig { get; } = new EventId(2102, nameof(BotCmdsConfig));
-        public static EventId BotCmdsExec { get; } = new EventId(2200, nameof(BotCmdsExec));
-        public static EventId BotCmdsError { get; } = new EventId(2400, nameof(BotCmdsError));
-        public static EventId BotCmdsAuthError { get; } = new EventId(2401, nameof(BotCmdsAuthError));
+        public static EventId BotCmdModuleConfig { get; } = new EventId(2102, nameof(BotCmdModuleConfig));
+        public static EventId BotCmdExec { get; } = new EventId(2200, nameof(BotCmdExec));
+        public static EventId BotCmdError { get; } = new EventId(2400, nameof(BotCmdError));
+        public static EventId BotCmdAuthError { get; } = new EventId(2401, nameof(BotCmdAuthError));
 
         #endregion
     }

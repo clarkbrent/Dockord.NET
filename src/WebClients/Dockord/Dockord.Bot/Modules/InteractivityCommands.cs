@@ -1,4 +1,4 @@
-﻿using DSharpPlus.CommandsNext;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Modules
 {
-    class InteractivityCommands : BaseCommandModule
+    internal class InteractivityCommands : BaseCommandModule
     {
         [Command("respondreaction")]
         [Description("Creates an interactive emoji reaction dialog.")]

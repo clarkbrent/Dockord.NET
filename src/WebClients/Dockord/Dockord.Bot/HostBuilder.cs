@@ -1,5 +1,4 @@
-﻿using Dockord.Bot.Configuration;
-using Dockord.Bot.Events;
+﻿using Dockord.Bot.Events;
 using Dockord.Bot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,7 +6,7 @@ using Serilog;
 
 namespace Dockord.Bot
 {
-    partial class Program
+    internal partial class Program
     {
         /// <summary>
         /// Creates a project specific <see cref="IHostBuilder"/>.
@@ -18,10 +17,10 @@ namespace Dockord.Bot
         /// <returns><see cref="IHostBuilder"/></returns>
         private static IHostBuilder CreateHostBuilder() =>
             Host.CreateDefaultBuilder()
-                .ConfigureServices((context, services) =>
+                .ConfigureServices((services) =>
                 {
-                    services.AddSingleton<IDockordConfig, DockordConfig>();
-                    services.AddSingleton<IUtilityService, SetupService>();
+                    services.AddSingleton<IDockordConfigService, DockordConfigService>();
+                    services.AddSingleton<IDiscordConfigService, DiscordConfigService>();
                     services.AddSingleton<IBotService, BotService>();
                     services.AddSingleton<IEventService, EventService>();
 

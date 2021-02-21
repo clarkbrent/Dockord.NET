@@ -1,5 +1,4 @@
-﻿using Dockord.Bot.Configuration;
-using DSharpPlus;
+﻿using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Enums;
@@ -12,18 +11,18 @@ namespace Dockord.Bot.Services
     /// <summary>
     /// Helper service for initializing DSharpPlus configuration values
     /// </summary>
-    class SetupService : IUtilityService
+    internal class DiscordConfigService : IDiscordConfigService
     {
-        private readonly IDockordConfig _config;
+        private readonly IDockordConfigService _config;
         private readonly IServiceProvider _services;
 
-        public SetupService(IDockordConfig config, IServiceProvider services)
+        public DiscordConfigService(IDockordConfigService config, IServiceProvider services)
         {
             _config = config;
             _services = services;
         }
 
-        public DiscordConfiguration GetDiscordConfg() =>
+        public DiscordConfiguration Client =>
             new DiscordConfiguration
             {
                 AlwaysCacheMembers = _config.BotSettings.AlwaysCacheMembers ?? default,
@@ -36,7 +35,7 @@ namespace Dockord.Bot.Services
                 TokenType = TokenType.Bot,
             };
 
-        public CommandsNextConfiguration GetCommandsConfig() =>
+        public CommandsNextConfiguration CommandsNext =>
             new CommandsNextConfiguration
             {
                 StringPrefixes = new[] { _config.BotSettings.Prefix },
@@ -45,11 +44,17 @@ namespace Dockord.Bot.Services
                 Services = _services,
             };
 
-        public InteractivityConfiguration GetInteractivityConfig() =>
+        public InteractivityConfiguration Interactivity =>
             new InteractivityConfiguration
             {
                 PollBehaviour = PollBehaviour.KeepEmojis,
                 Timeout = TimeSpan.FromMinutes(2),
             };
+    }
+    internal interface IDiscordConfigService
+    {
+        CommandsNextConfiguration CommandsNext { get; }
+        DiscordConfiguration Client { get; }
+        InteractivityConfiguration Interactivity { get; }
     }
 }

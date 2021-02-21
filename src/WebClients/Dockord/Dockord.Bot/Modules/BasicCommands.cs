@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Modules
 {
-    class BasicCommands : BaseCommandModule
+    internal class BasicCommands : BaseCommandModule
     {
         [Command("ping")]
         [Description("Example ping command.")]
         [Aliases("pong")]
         public async Task Ping(CommandContext ctx)
         {
-            await ctx.TriggerTypingAsync();
+            await ctx.TriggerTypingAsync().ConfigureAwait(false);
 
             var emoji = DiscordEmoji.FromName(ctx.Client, ":ping_pong:");
 
-            await ctx.RespondAsync($"{emoji} Pong! Ping: {ctx.Client.Ping}ms");
+            await ctx.RespondAsync($"{emoji} Pong! Ping: {ctx.Client.Ping}ms").ConfigureAwait(false);
         }
 
         [Command("greet")]
@@ -24,11 +24,11 @@ namespace Dockord.Bot.Modules
         [Aliases("sayhi", "say_hi")]
         public async Task Greet(CommandContext ctx, [Description("The user to say hi to.")] DiscordMember member)
         {
-            await ctx.TriggerTypingAsync();
+            await ctx.TriggerTypingAsync().ConfigureAwait(false);
 
             var emoji = DiscordEmoji.FromName(ctx.Client, ":wave:");
 
-            await ctx.RespondAsync($"{emoji} Hello, {member.Mention}!");
+            await ctx.RespondAsync($"{emoji} Hello, {member.Mention}!").ConfigureAwait(false);
         }
 
         [Command("deletemessages")]
@@ -37,9 +37,9 @@ namespace Dockord.Bot.Modules
         [RequireOwner]
         public async Task DeleteMessages(CommandContext ctx, [Description("The amount of messages to delete.")] int limit = 100)
         {
-            var messages = await ctx.Channel.GetMessagesAsync(limit);
+            var messages = await ctx.Channel.GetMessagesAsync(limit).ConfigureAwait(false);
 
-            await ctx.Channel.DeleteMessagesAsync(messages);
+            await ctx.Channel.DeleteMessagesAsync(messages).ConfigureAwait(false);
         }
     }
 }

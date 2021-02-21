@@ -1,4 +1,4 @@
-﻿using Dockord.Bot.Configuration;
+﻿using Dockord.Bot.Services;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Dockord.Bot
 {
-    partial class Program
+    internal partial class Program
     {
         /// <summary>
         /// Creates a project specific <see cref="IConfigurationBuilder"/>.
@@ -29,7 +29,7 @@ namespace Dockord.Bot
         /// <returns><see cref="LoggerConfiguration"/></returns>
         private static LoggerConfiguration SetupLogger(IConfiguration config)
         {
-            var dockordConfig = new DockordConfig(config);
+            var dockordConfig = new DockordConfigService(config);
 
             var logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(config)

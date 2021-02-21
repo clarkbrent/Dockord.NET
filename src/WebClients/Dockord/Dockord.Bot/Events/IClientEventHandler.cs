@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Events
 {
-    interface IClientEventHandler
+    public interface IClientEventHandler
     {
         Task ClientError(DiscordClient client, ClientErrorEventArgs e);
         Task ClientReady(DiscordClient client, ReadyEventArgs e);

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Events
 {
-    interface ICommandEventHandler
+    public interface ICommandEventHandler
     {
         Task CommandExecuted(CommandsNextExtension sender, CommandExecutionEventArgs e);
         Task CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e);

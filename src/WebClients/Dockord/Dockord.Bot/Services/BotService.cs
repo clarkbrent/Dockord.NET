@@ -1,4 +1,4 @@
-﻿using Dockord.Bot.Events;
+using Dockord.Bot.Events;
 using Dockord.Bot.Modules;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
@@ -9,52 +9,51 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Services
 {
-    class BotService : IBotService
+    internal class BotService : IBotService
     {
         private readonly ILogger<BotService> _logger;
-        private readonly IUtilityService _utilityService;
+        private readonly IDiscordConfigService _discordConfig;
         private readonly IEventService _eventService;
 
-        public BotService(ILogger<BotService> logger, IEventService eventService, IUtilityService utilityService)
+        public BotService(ILogger<BotService> logger, IEventService eventService, IDiscordConfigService discordConfig)
         {
             _logger = logger;
             _eventService = eventService;
-            _utilityService = utilityService;
+            _discordConfig = discordConfig;
 
             Client = SetClient();
             Commands = SetCommands();
         }
 
-        public DiscordClient Client { get; private set; }
-        public CommandsNextExtension Commands { get; private set; }
+        public DiscordClient Client { get; }
+        public CommandsNextExtension Commands { get; }
 
         public async Task RunAsync()
         {
-            _logger.LogInformation(DockordEvents.BotClientStarting, "Starting bot...");
-            await Client.ConnectAsync();
+            _logger.LogInformation(DockordEventId.BotClientStarting, "Starting bot...");
 
-            await Task.Delay(-1); // Run bot forever
+            await Client.ConnectAsync().ConfigureAwait(false);
+
+            await Task.Delay(-1).ConfigureAwait(false); // Run bot forever
         }
 
         private DiscordClient SetClient()
         {
-            _logger.LogInformation(DockordEvents.BotClientConfig, "Configuring bot client...");
+            _logger.LogInformation(DockordEventId.BotClientConfig, "Configuring bot client...");
 
-            var client = new DiscordClient(config: _utilityService.GetDiscordConfg())
-                ?? throw new InvalidOperationException("Failed to configure bot client.");
+            var client = new DiscordClient(_discordConfig.Client);
 
             _eventService.SetupClientEventHandlers(client);
-
-            client.UseInteractivity(configuration: _utilityService.GetInteractivityConfig());
+            client.UseInteractivity(_discordConfig.Interactivity);
 
             return client;
         }
 
         private CommandsNextExtension SetCommands()
         {
-            _logger.LogInformation(DockordEvents.BotCmdsConfig, "Configuring bot commands...");
+            _logger.LogInformation(DockordEventId.BotCmdModuleConfig, "Configuring bot commands...");
 
-            CommandsNextExtension commands = Client.UseCommandsNext(cfg: _utilityService.GetCommandsConfig())
+            CommandsNextExtension commands = Client.UseCommandsNext(_discordConfig.CommandsNext)
                 ?? throw new InvalidOperationException("Failed to configure bot commands.");
 
             _eventService.SetupCommandEventHandlers(commands);
@@ -64,5 +63,14 @@ namespace Dockord.Bot.Services
 
             return commands;
         }
+    }
+
+    /// <summary>Initializes a DSharpPlus Discord client, and it's commands.</summary>
+    internal interface IBotService
+    {
+        DiscordClient Client { get; }
+        CommandsNextExtension Commands { get; }
+
+        Task RunAsync();
     }
 }
