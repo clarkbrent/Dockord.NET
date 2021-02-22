@@ -1,11 +1,13 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
+using System;
 using System.Threading.Tasks;
 
 namespace Dockord.Bot.Modules
 {
-    internal class BasicCommands : BaseCommandModule
+#pragma warning disable CA1822 // Cannot mark members as static because DSharpPlus injects command modules as a depedency
+    public class BasicCommands : BaseCommandModule
     {
         [Command("ping")]
         [Description("Example ping command.")]
@@ -37,9 +39,13 @@ namespace Dockord.Bot.Modules
         [RequireOwner]
         public async Task DeleteMessages(CommandContext ctx, [Description("The amount of messages to delete.")] int limit = 100)
         {
+            if (ctx.Channel.IsPrivate)
+                throw new InvalidOperationException("Cannot use this command in a direct message.");
+
             var messages = await ctx.Channel.GetMessagesAsync(limit).ConfigureAwait(false);
 
             await ctx.Channel.DeleteMessagesAsync(messages).ConfigureAwait(false);
         }
     }
+#pragma warning restore CA1822 // Mark members as static
 }

@@ -1,5 +1,6 @@
 using Dockord.Bot.Events;
 using Dockord.Bot.Modules;
+using Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity.Extensions;
@@ -59,7 +60,7 @@ namespace Dockord.Bot.Services
             _eventService.SetupCommandEventHandlers(commands);
 
             commands.RegisterCommands<BasicCommands>();
-            commands.RegisterCommands<InteractivityCommands>();
+            commands.RegisterCommands<ConfirmOrDeny>();
 
             return commands;
         }

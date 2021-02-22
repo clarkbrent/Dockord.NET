@@ -27,8 +27,8 @@ namespace Dockord.Bot.Events
 
         public async Task CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
         {
-            _commandName = e.Command.QualifiedName;
             _commandArgs = e.Context.RawArgumentString;
+            _commandName = e.Command?.QualifiedName ?? e.Context.Message?.Content;
             _isDirectMessage = e.Context.Channel?.IsPrivate;
             EventId eventId = DockordEventId.BotCmdError;
 
@@ -45,7 +45,6 @@ namespace Dockord.Bot.Events
             }
             else
             {
-                EventId eventId = DockordEventId.BotCmdError;
                 LogCommandEvent(e, eventId, eventMessage: "Error executing command.");
 
                 await SendErrorResponse(e,
