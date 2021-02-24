@@ -1,3 +1,4 @@
+using Dockord.Bot.Services;
 using Dockord.Library.Events;
 using Dockord.Library.Exceptions;
 using Dockord.Library.Extensions;
@@ -14,9 +15,15 @@ namespace Dockord.Bot.Events
 {
     public class CommandEventHandler : ICommandEventHandler
     {
+        private readonly IConfigurationService _config;
         private string? _commandArgs;
         private string? _commandName;
         private bool? _isDirectMessage;
+
+        public CommandEventHandler(IConfigurationService config)
+        {
+            _config = config;
+        }
 
         public Task CommandExecuted(CommandsNextExtension sender, CommandExecutionEventArgs e)
         {
@@ -93,8 +100,8 @@ namespace Dockord.Bot.Events
 
         private async Task SendErrorResponse(CommandErrorEventArgs e, string title, string description)
         {
+            int deleteSecondsDelay = _config.BotSettings.ErrorMessageDeleteSecondsDelay ?? 15;
             bool deleteMessage = true;
-            int deletionDelay = 15;
             var emoji = DiscordEmoji.FromName(e.Context.Client, ":no_entry:");
             var embed = new DiscordEmbedBuilder()
                 .WithTitle(title)
@@ -105,7 +112,7 @@ namespace Dockord.Bot.Events
             if (e.Exception is not InteractivityTimedOutException && _isDirectMessage == false)
             {
                 embed.WithFooter("NOTE: The message in the jump link that caused the error will be " +
-                    $"deleted from the channel automatically after {deletionDelay} seconds.");
+                    $"deleted from the channel automatically after {deleteSecondsDelay} seconds.");
             }
             else
             {
@@ -121,7 +128,7 @@ namespace Dockord.Bot.Events
                 await e.Context.RespondAsync(embed).ConfigureAwait(false);
 
             if (deleteMessage)
-                await DeleteContextMessage(e, deletionDelay).ConfigureAwait(false);
+                await DeleteContextMessage(e, deleteSecondsDelay).ConfigureAwait(false);
         }
 
         private static async Task DeleteContextMessage(CommandErrorEventArgs e, int deletionDelay = 15)
