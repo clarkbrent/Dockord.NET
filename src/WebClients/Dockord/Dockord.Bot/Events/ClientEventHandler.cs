@@ -20,14 +20,14 @@ namespace Dockord.Bot.Events
 
         public Task ClientErrored(DiscordClient client, ClientErrorEventArgs e)
         {
-            var clientError = new DiscordEventDataModel
+            var clientEventModel = new ClientEventModel
             {
                 Username = client.CurrentUser?.Username,
                 UserDiscriminator = client.CurrentUser?.Discriminator,
                 UserId = client.CurrentUser?.Id,
             };
 
-            (string message, object[] args) = clientError.ToEventLogTuple(message: "Discord client error occurred.");
+            (string message, object[] args) = clientEventModel.ToEventLogTuple(message: "Discord client error occurred.");
 
             client.Logger.LogError(DockordEventId.BotClientError, e.Exception, message, args);
 
@@ -36,13 +36,13 @@ namespace Dockord.Bot.Events
 
         public Task GuildAvailable(DiscordClient client, GuildCreateEventArgs e)
         {
-            var guildAvailable = new DiscordEventDataModel
+            var clientEventModel = new ClientEventModel
             {
                 GuildName = e.Guild.Name,
                 GuildId = e.Guild.Id,
             };
 
-            (string message, object[] args) = guildAvailable.ToEventLogTuple(message: "Guild available.");
+            (string message, object[] args) = clientEventModel.ToEventLogTuple(message: "Guild available.");
 
             client.Logger.LogInformation(DockordEventId.BotClientGuildAvailable, message, args);
 

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Dockord.Library.Extensions
 {
-    public static class DiscordEventDataExtensions
+    public static class DiscordEventExtensions
     {
         /// <summary>
         /// Creates a tuple that contains a log message <see cref="string"/> template, and an <see cref="object"/>[] containing the log message template's arguments.
@@ -13,17 +13,18 @@ namespace Dockord.Library.Extensions
         /// </remarks>
         /// <returns>
         /// A tuple containing:<br />
-        /// - A log message template <see cref="string"/> created from the property names of <see cref="DiscordEventDataModel"/> <paramref name="discordEvent"/>.<br />
-        /// - An <see cref="object"/>[] containing the property values of <see cref="DiscordEventDataModel"/> <paramref name="discordEvent"/>.
+        /// - A log message template <see cref="string"/> created from the property names of <see cref="IDiscordEvent"/> <paramref name="discordEvent"/>.<br />
+        /// - An <see cref="object"/>[] containing the property values of <see cref="IDiscordEvent"/> <paramref name="discordEvent"/>.
         /// </returns>
-        public static (string, object[]) ToEventLogTuple(this IDiscordEventDataModel discordEvent, string message = "")
+        public static (string, object[]) ToEventLogTuple(this IDiscordEvent discordEvent, string message = "")
         {
-            int counter = 0;
-            var properties = discordEvent.GetType().GetProperties();
             var sb = new StringBuilder();
 
             if (!string.IsNullOrWhiteSpace(message))
                 sb.Append(message).Append(' ');
+
+            int counter = 0;
+            var properties = discordEvent.GetType().GetProperties();
 
             // Get total count of all non-null properties from the event
             foreach (var property in properties)

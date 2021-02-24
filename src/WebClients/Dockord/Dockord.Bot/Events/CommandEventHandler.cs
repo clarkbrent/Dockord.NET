@@ -76,7 +76,7 @@ namespace Dockord.Bot.Events
 
         private void LogCommandEvent(CommandEventArgs e, EventId eventId, string eventMessage = "")
         {
-            var eventData = new DiscordEventDataModel
+            var cmdEventModel = new CommandEventModel
             {
                 CommandName = _commandName,
                 CommandArgs = _commandArgs,
@@ -90,7 +90,7 @@ namespace Dockord.Bot.Events
                 GuildId = e.Context.Guild?.Id,
             };
 
-            (string message, object[] args) = eventData.ToEventLogTuple(eventMessage);
+            (string message, object[] args) = cmdEventModel.ToEventLogTuple(eventMessage);
 
             if (e is CommandErrorEventArgs commandError)
                 e.Context.Client.Logger.LogError(eventId, commandError.Exception, message, args);
