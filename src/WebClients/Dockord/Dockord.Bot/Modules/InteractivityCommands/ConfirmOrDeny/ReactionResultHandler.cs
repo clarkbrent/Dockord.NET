@@ -1,4 +1,5 @@
-﻿using DSharpPlus.CommandsNext;
+﻿using Dockord.Library.Exceptions;
+using DSharpPlus.CommandsNext;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Interactivity;
@@ -63,7 +64,7 @@ namespace Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny
             await reactionMessage.DeleteAllReactions().ConfigureAwait(false);
             await reactionMessage.Update(embedBuilder).ConfigureAwait(false);
 
-            throw new TimeoutException("Command timed out waiting for either approval or denial.");
+            throw new InteractivityTimedOutException("Command timed out waiting for either approval or denial.");
         }
 
         /// <summary>
