@@ -1,4 +1,4 @@
-﻿using Dockord.Bot.Configuration;
+﻿using Dockord.Bot.Configuration.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -7,11 +7,11 @@ namespace Dockord.Bot.Services
     /// <summary>
     /// Creates strongly typed configuration values from <see cref="IConfiguration"/>.
     /// </summary>
-    internal class DockordConfigService : BaseConfig, IDockordConfigService
+    public class ConfigurationService : IConfigurationService
     {
         private readonly IConfiguration _config;
 
-        public DockordConfigService(IConfiguration config)
+        public ConfigurationService(IConfiguration config)
         {
             _config = config;
 
@@ -22,8 +22,8 @@ namespace Dockord.Bot.Services
                    .Bind(Serilog, x => x.BindNonPublicProperties = true);
         }
 
-        public BotSettingsOptions BotSettings { get; } = new BotSettingsOptions();
-        public SerilogOptions Serilog { get; } = new SerilogOptions();
+        public SectionBotSettings BotSettings { get; } = new SectionBotSettings();
+        public SectionSerilog Serilog { get; } = new SectionSerilog();
 
         public LogLevel GetMinimumLogLevel()
         {
@@ -40,10 +40,10 @@ namespace Dockord.Bot.Services
         }
     }
 
-    internal interface IDockordConfigService
+    public interface IConfigurationService
     {
-        BotSettingsOptions BotSettings { get; }
-        SerilogOptions Serilog { get; }
+        SectionBotSettings BotSettings { get; }
+        SectionSerilog Serilog { get; }
 
         LogLevel GetMinimumLogLevel();
     }

@@ -6,7 +6,7 @@ namespace Dockord.Bot.Events
 {
     public interface IClientEventHandler
     {
-        Task ClientError(DiscordClient client, ClientErrorEventArgs e);
+        Task ClientErrored(DiscordClient client, ClientErrorEventArgs e);
         Task ClientReady(DiscordClient client, ReadyEventArgs e);
         Task GuildAvailable(DiscordClient client, GuildCreateEventArgs e);
     }

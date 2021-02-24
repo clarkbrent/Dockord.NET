@@ -1,6 +1,6 @@
-using Dockord.Bot.Events;
 using Dockord.Bot.Modules;
 using Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny;
+using Dockord.Library.Events;
 using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity.Extensions;
@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Services
 {
-    internal class BotService : IBotService
+    public class DockordBotService : IDockordBotService
     {
-        private readonly ILogger<BotService> _logger;
+        private readonly ILogger<DockordBotService> _logger;
         private readonly IDiscordConfigService _discordConfig;
-        private readonly IEventService _eventService;
+        private readonly IDiscordEventService _eventService;
 
-        public BotService(ILogger<BotService> logger, IEventService eventService, IDiscordConfigService discordConfig)
+        public DockordBotService(ILogger<DockordBotService> logger, IDiscordEventService eventService, IDiscordConfigService discordConfig)
         {
             _logger = logger;
             _eventService = eventService;
@@ -67,7 +67,7 @@ namespace Dockord.Bot.Services
     }
 
     /// <summary>Initializes a DSharpPlus Discord client, and it's commands.</summary>
-    internal interface IBotService
+    public interface IDockordBotService
     {
         DiscordClient Client { get; }
         CommandsNextExtension Commands { get; }

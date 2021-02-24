@@ -8,23 +8,24 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot
 {
-    internal partial class Program
+    internal static class Program
     {
         private static async Task Main()
         {
             string nameSpace = typeof(Program).Namespace!;
             string appName = nameSpace[(nameSpace.LastIndexOf('.', nameSpace.LastIndexOf('.') - 1) + 1)..];
 
-            IConfiguration config = CreateConfigBuilder().Build();
-            Log.Logger = SetupLogger(config).CreateLogger();
+            IConfiguration config = DockordBotConfig.Create();
+            Log.Logger = DockordBotLogger.Create(config);
 
             try
             {
-                Log.Information($"Configuring app ({{{nameof(appName)}}})...", appName);
-                IHost host = CreateHostBuilder().Build()
+                Log.Information($"Configuring {{{nameof(appName)}}}...", appName);
+
+                IHost host = DockordBotHost.Create()
                     ?? throw new InvalidOperationException("An error occured while configuring the host.");
 
-                IBotService bot = host.Services.GetService<IBotService>()
+                IDockordBotService bot = host.Services.GetService<IDockordBotService>()
                     ?? throw new InvalidOperationException("Bot service could not be found.");
 
                 await bot.RunAsync().ConfigureAwait(false);

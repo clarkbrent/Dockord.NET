@@ -5,14 +5,14 @@ using DSharpPlus.CommandsNext;
 namespace Dockord.Bot.Services
 {
     /// <summary>
-    /// Initializes event handlers for various Dockord, and DSharpPlus events.
+    /// Initializes event handlers for various DSharpPlus events.
     /// </summary>
-    internal class EventService : IEventService
+    public class DiscordEventService : IDiscordEventService
     {
         private readonly IClientEventHandler _clientEventHandler;
         private readonly ICommandEventHandler _commandEventHandler;
 
-        public EventService(IClientEventHandler clientEventHandler, ICommandEventHandler commandEventHandler)
+        public DiscordEventService(IClientEventHandler clientEventHandler, ICommandEventHandler commandEventHandler)
         {
             _clientEventHandler = clientEventHandler;
             _commandEventHandler = commandEventHandler;
@@ -20,7 +20,7 @@ namespace Dockord.Bot.Services
 
         public void SetupClientEventHandlers(DiscordClient client)
         {
-            client.ClientErrored += _clientEventHandler.ClientError;
+            client.ClientErrored += _clientEventHandler.ClientErrored;
             client.Ready += _clientEventHandler.ClientReady;
             client.GuildAvailable += _clientEventHandler.GuildAvailable;
         }
@@ -32,7 +32,7 @@ namespace Dockord.Bot.Services
         }
     }
 
-    internal interface IEventService
+    public interface IDiscordEventService
     {
         void SetupClientEventHandlers(DiscordClient client);
         void SetupCommandEventHandlers(CommandsNextExtension commands);

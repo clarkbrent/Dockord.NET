@@ -1,3 +1,4 @@
+using Dockord.Library.Events;
 using Dockord.Library.Exceptions;
 using Dockord.Library.Extensions;
 using Dockord.Library.Models;

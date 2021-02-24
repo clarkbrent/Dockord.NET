@@ -11,12 +11,12 @@ namespace Dockord.Bot.Services
     /// <summary>
     /// Helper service for initializing DSharpPlus configuration values
     /// </summary>
-    internal class DiscordConfigService : IDiscordConfigService
+    public class DiscordConfigService : IDiscordConfigService
     {
-        private readonly IDockordConfigService _config;
+        private readonly IConfigurationService _config;
         private readonly IServiceProvider _services;
 
-        public DiscordConfigService(IDockordConfigService config, IServiceProvider services)
+        public DiscordConfigService(IConfigurationService config, IServiceProvider services)
         {
             _config = config;
             _services = services;
@@ -51,7 +51,7 @@ namespace Dockord.Bot.Services
                 Timeout = TimeSpan.FromMinutes(2),
             };
     }
-    internal interface IDiscordConfigService
+    public interface IDiscordConfigService
     {
         CommandsNextConfiguration CommandsNext { get; }
         DiscordConfiguration Client { get; }

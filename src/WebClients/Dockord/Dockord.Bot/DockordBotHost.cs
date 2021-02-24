@@ -6,27 +6,28 @@ using Serilog;
 
 namespace Dockord.Bot
 {
-    internal partial class Program
+    internal static class DockordBotHost
     {
         /// <summary>
-        /// Creates a project specific <see cref="IHostBuilder"/>.
+        /// Creates a project specific <see cref="IHost"/>.
         /// </summary>
         /// <remarks>
-        /// Adds dependency injection to project.
+        /// Sets up dependency injection in project.
         /// </remarks>
-        /// <returns><see cref="IHostBuilder"/></returns>
-        private static IHostBuilder CreateHostBuilder() =>
+        /// <returns><see cref="IHost"/></returns>
+        public static IHost Create() =>
             Host.CreateDefaultBuilder()
                 .ConfigureServices((services) =>
                 {
-                    services.AddSingleton<IDockordConfigService, DockordConfigService>();
+                    services.AddSingleton<IConfigurationService, ConfigurationService>();
                     services.AddSingleton<IDiscordConfigService, DiscordConfigService>();
-                    services.AddSingleton<IBotService, BotService>();
-                    services.AddSingleton<IEventService, EventService>();
+                    services.AddSingleton<IDockordBotService, DockordBotService>();
+                    services.AddSingleton<IDiscordEventService, DiscordEventService>();
 
                     services.AddTransient<IClientEventHandler, ClientEventHandler>();
                     services.AddTransient<ICommandEventHandler, CommandEventHandler>();
                 })
-                .UseSerilog();
+                .UseSerilog()
+                .Build();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Dockord.Library.Extensions;
 using Dockord.Library.Models;
+using Dockord.Library.Events;
 using DSharpPlus;
 using DSharpPlus.EventArgs;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,7 @@ namespace Dockord.Bot.Events
             return Task.CompletedTask;
         }
 
-        public Task ClientError(DiscordClient client, ClientErrorEventArgs e)
+        public Task ClientErrored(DiscordClient client, ClientErrorEventArgs e)
         {
             var clientError = new DiscordEventDataModel
             {

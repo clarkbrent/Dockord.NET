@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace Dockord.Bot.Events
+namespace Dockord.Library.Events
 {
-    /// <summary>Library of static Dockord related <see cref="EventId"/>'s.</summary>
+    /// <summary>Library of static Dockord bot related <see cref="EventId"/>'s.</summary>
     /// <remarks>
     /// <para>
     /// <see cref="EventId.Id"/> should represent a subset of events followed by an equivalent HTTP status code similar to the operation the event is referencing. <br />

@@ -1,6 +1,6 @@
-﻿namespace Dockord.Bot.Configuration
+﻿namespace Dockord.Bot.Configuration.Options
 {
-    public class BotSettingsOptions : BaseConfig
+    public class SectionBotSettings
     {
         public bool? AlwaysCacheMembers { get; private protected set; }
         public int? MessageCacheSize { get; private protected set; }
