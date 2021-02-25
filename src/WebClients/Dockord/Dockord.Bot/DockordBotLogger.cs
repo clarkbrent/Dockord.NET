@@ -1,5 +1,4 @@
 ﻿using Dockord.Bot.Services;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Core;
 
@@ -11,21 +10,21 @@ namespace Dockord.Bot
         /// Creates a project specific Serilog <see cref="LoggerConfiguration"/>.
         /// </summary>
         /// <returns><see cref="LoggerConfiguration"/></returns>
-        public static Logger Create(IConfiguration config)
+        public static Logger Create()
         {
-            var dockordConfig = new ConfigurationService(config);
+            DockordBotConfig config = DockordBotConfig.Get();
 
             var loggerConfig = new LoggerConfiguration()
-                .ReadFrom.Configuration(config)
+                .ReadFrom.Configuration(config.GetSerilogSection())
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
                 .Enrich.WithProcessId()
                 .Enrich.WithThreadId();
 
-            if (string.IsNullOrWhiteSpace(dockordConfig.Serilog?.SeqUrl))
+            if (string.IsNullOrWhiteSpace(config.Serilog?.SeqUrl))
                 loggerConfig.WriteTo.Console();
             else
-                loggerConfig.WriteTo.Seq(dockordConfig.Serilog.SeqUrl);
+                loggerConfig.WriteTo.Seq(config.Serilog.SeqUrl);
 
             return loggerConfig.CreateLogger();
         }

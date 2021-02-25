@@ -9,7 +9,7 @@ namespace Dockord.Bot.Services
     /// <summary>
     /// Creates a singleton that stores strongly typed values from <see cref="IConfiguration"/>.
     /// </summary>
-    public sealed class DockordBotConfig : IDockordBotConfig
+    internal sealed class DockordBotConfig : IDockordBotConfig
     {
         private static readonly DockordBotConfig _instance = new DockordBotConfig();
         private readonly IConfiguration _config;
@@ -53,9 +53,9 @@ namespace Dockord.Bot.Services
         }
 
         /// <summary>
-        /// Creates a project specific <see cref="IConfigurationBuilder"/>.
+        /// Creates a project specific <see cref="IConfiguration"/>.
         /// </summary>
-        /// <returns><see cref="IConfigurationBuilder"/></returns>
+        /// <returns><see cref="IConfiguration"/></returns>
         private static IConfiguration Create()
         {
             string currentEnvironment = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT") ?? "Production";

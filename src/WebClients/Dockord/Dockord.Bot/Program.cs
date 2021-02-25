@@ -1,5 +1,4 @@
 using Dockord.Bot.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -15,8 +14,7 @@ namespace Dockord.Bot
             string nameSpace = typeof(Program).Namespace!;
             string appName = nameSpace[(nameSpace.LastIndexOf('.', nameSpace.LastIndexOf('.') - 1) + 1)..];
 
-            IConfiguration config = DockordBotConfig.Create();
-            Log.Logger = DockordBotLogger.Create(config);
+            Log.Logger = DockordBotLogger.Create();
 
             try
             {
