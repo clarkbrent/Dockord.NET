@@ -1,4 +1,4 @@
-﻿using Dockord.Bot.Events;
+using Dockord.Bot.Events;
 using Dockord.Bot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,7 +19,7 @@ namespace Dockord.Bot
             Host.CreateDefaultBuilder()
                 .ConfigureServices((services) =>
                 {
-                    services.AddSingleton<IConfigurationService, ConfigurationService>();
+                    services.AddSingleton<IDockordBotConfig>(DockordBotConfig.Get());
                     services.AddSingleton<IDiscordConfigService, DiscordConfigService>();
                     services.AddSingleton<IDockordBotService, DockordBotService>();
                     services.AddSingleton<IDiscordEventService, DiscordEventService>();

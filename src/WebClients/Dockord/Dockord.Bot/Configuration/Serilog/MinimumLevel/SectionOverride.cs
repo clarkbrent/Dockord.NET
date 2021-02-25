@@ -1,6 +1,4 @@
-﻿using Dockord.Bot.Configuration.Options;
-
-namespace Dockord.Bot.Configuration.Serilog.MinimumLevel
+﻿namespace Dockord.Bot.Configuration.Serilog.MinimumLevel
 {
     public class SectionOverride
     {

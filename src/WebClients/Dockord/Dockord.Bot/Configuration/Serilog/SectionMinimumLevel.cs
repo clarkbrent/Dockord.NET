@@ -1,5 +1,4 @@
-﻿using Dockord.Bot.Configuration.Options;
-using Dockord.Bot.Configuration.Serilog.MinimumLevel;
+﻿using Dockord.Bot.Configuration.Serilog.MinimumLevel;
 
 namespace Dockord.Bot.Configuration.Serilog
 {
