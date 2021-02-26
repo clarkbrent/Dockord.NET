@@ -28,7 +28,7 @@ namespace Dockord.Bot.Services
                 AlwaysCacheMembers = _config.BotSettings.AlwaysCacheMembers ?? default,
                 AutoReconnect = true,
                 Intents = DiscordIntents.AllUnprivileged,
-                LoggerFactory = new LoggerFactory().AddSerilog(Log.Logger),
+                LoggerFactory = new LoggerFactory().AddSerilog(),
                 MessageCacheSize = _config.BotSettings.MessageCacheSize ?? default,
                 MinimumLogLevel = _config.GetMinimumLogLevel(),
                 Token = _config.BotSettings.Token,

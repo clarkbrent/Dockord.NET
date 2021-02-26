@@ -18,7 +18,7 @@ namespace Dockord.Bot
 
             try
             {
-                Log.Information($"Configuring {{{nameof(appName)}}}...", appName);
+                Log.Information($"Configuring app ({{{nameof(appName)}}})...", appName);
 
                 IHost host = DockordBotHost.Create()
                     ?? throw new InvalidOperationException("An error occured while configuring the host.");
@@ -30,7 +30,7 @@ namespace Dockord.Bot
             }
             catch (Exception ex)
             {
-                Log.Fatal(ex, $"{{{nameof(appName)}}} terminated unexpectedly!", appName);
+                Log.Fatal(ex, $"App ({{{nameof(appName)}}}) terminated unexpectedly!", appName);
             }
             finally
             {

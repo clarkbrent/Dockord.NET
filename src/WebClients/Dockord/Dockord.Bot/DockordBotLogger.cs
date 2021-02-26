@@ -1,18 +1,14 @@
 ﻿using Dockord.Bot.Services;
 using Serilog;
-using Serilog.Core;
+using System;
 
 namespace Dockord.Bot
 {
     internal static class DockordBotLogger
     {
-        /// <summary>
-        /// Creates a project specific Serilog <see cref="LoggerConfiguration"/>.
-        /// </summary>
-        /// <returns><see cref="LoggerConfiguration"/></returns>
-        public static Logger Create()
+        public static ILogger Create()
         {
-            DockordBotConfig config = DockordBotConfig.Get();
+            IDockordBotConfig config = DockordBotConfig.Get();
 
             var loggerConfig = new LoggerConfiguration()
                 .ReadFrom.Configuration(config.GetSerilogSection())
@@ -26,7 +22,12 @@ namespace Dockord.Bot
             else
                 loggerConfig.WriteTo.Seq(config.Serilog.SeqUrl);
 
-            return loggerConfig.CreateLogger();
+            ILogger logger = loggerConfig.CreateLogger();
+
+            if (logger == null)
+                throw new InvalidOperationException("Error building logger.");
+
+            return logger;
         }
     }
 }
