@@ -69,6 +69,10 @@ namespace Dockord.Bot.Events
                 title = "Timed out";
                 description = interactivityTimedOutEx.Message;
             }
+            else if (e.Exception is InvalidOperationException && !string.IsNullOrWhiteSpace(e.Exception.Message))
+            {
+                description = e.Exception.Message;
+            }
 
             LogCommandEvent(e, eventId, eventMessage);
             await SendErrorResponse(e, title, description).ConfigureAwait(false);
@@ -119,7 +123,7 @@ namespace Dockord.Bot.Events
                 deleteMessage = false;
             }
 
-            if (e.Context.Message.JumpLink != null)
+            if (_isDirectMessage == false && e.Context.Message?.JumpLink != null)
                 embed.AddField("Jump Link", $"{e.Context.Message.JumpLink}");
 
             if (e.Context.User is DiscordMember user)

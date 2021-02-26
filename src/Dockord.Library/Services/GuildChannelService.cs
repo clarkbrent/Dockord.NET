@@ -17,8 +17,8 @@ namespace Dockord.Library.Services
         /// <param name="allowDirectMessages"></param>
         public static async Task<DiscordChannel> Find(CommandContext ctx, string channelName, bool allowDirectMessages = false)
         {
-            if (allowDirectMessages && ctx.Channel.IsPrivate)
-                throw new InvalidOperationException("This command cannot be sent in a direct message.");
+            if (ctx.Channel.IsPrivate && !allowDirectMessages)
+                throw new InvalidOperationException("This cannot be sent from a direct message.");
 
             IReadOnlyList<DiscordChannel> channels = await ctx.Guild.GetChannelsAsync().ConfigureAwait(false)
                 ?? throw new InvalidOperationException("No channels found on server.");
