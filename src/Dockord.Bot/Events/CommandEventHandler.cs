@@ -45,6 +45,7 @@ namespace Dockord.Bot.Events
             string eventMessage = "Error executing command.";
             string title = "Error occurred";
             string description = "There was an unspecified error while executing the command.";
+            string hint = "";
 
             if (e.Exception is CommandNotFoundException commandNotFoundEx)
             {
@@ -55,7 +56,8 @@ namespace Dockord.Bot.Events
             else if (e.Exception is NotFoundException)
             {
                 title = "Not found";
-                description = "Unable to find an expected resource. **HINT:** Was a required message or attachment deleted?";
+                description = "Unable to find an expected resource.";
+                hint = "Was a required message or attachment deleted?";
             }
             else if (e.Exception is ChecksFailedException) // Check if the error is from a lack of required permissions
             {
@@ -73,9 +75,15 @@ namespace Dockord.Bot.Events
             {
                 description = e.Exception.Message;
             }
+            else if (e.Exception is ArgumentException)
+            {
+                description = "There was an error with the command's argument(s).";
+                hint = "Did you forget to add a required argument? " +
+                    $"See `{e.Context.Prefix}help {_commandName}` for a full list of the command's available arguments.";
+            }
 
             LogCommandEvent(e, eventId, eventMessage);
-            await SendErrorResponse(e, title, description).ConfigureAwait(false);
+            await SendErrorResponse(e, title, description, hint).ConfigureAwait(false);
         }
 
         private void LogCommandEvent(CommandEventArgs e, EventId eventId, string eventMessage = "")
@@ -102,7 +110,7 @@ namespace Dockord.Bot.Events
                 e.Context.Client.Logger.LogInformation(eventId, message, args);
         }
 
-        private async Task SendErrorResponse(CommandErrorEventArgs e, string title, string description)
+        private async Task SendErrorResponse(CommandErrorEventArgs e, string title, string description, string? hint)
         {
             int deleteSecondsDelay = _config.BotSettings.ErrorMessageDeleteSecondsDelay ?? 15;
             bool deleteMessage = true;
@@ -110,8 +118,15 @@ namespace Dockord.Bot.Events
             var embed = new DiscordEmbedBuilder()
                 .WithTitle(title)
                 .WithDescription($"{emoji} {description}")
-                .WithColor(DiscordColor.Red)
-                .AddField("Command:", $"`{_commandName} {_commandArgs}`");
+                .WithColor(DiscordColor.Red);
+
+            if (string.IsNullOrWhiteSpace(_commandArgs))
+                embed.AddField("Command:", $"`{_commandName}`");
+            else
+                embed.AddField("Command:", $"`{_commandName} {_commandArgs}`");
+
+            if (!string.IsNullOrWhiteSpace(hint))
+                embed.AddField("HINT:", hint);
 
             if (e.Exception is not InteractivityTimedOutException && _isDirectMessage == false)
             {
