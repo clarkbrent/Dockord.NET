@@ -19,33 +19,35 @@ namespace Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny
 
         /// <summary>
         /// Update the interactivity reaction message, and then send a new result
-        /// message to the original channel that the command was executed from.
+        /// message to the original channel that the command was sent from.
         /// </summary>
         /// <param name="reactionMessage"></param>
-        /// <param name="reactionResult"></param>
-        public async Task Result(ReactionMessage reactionMessage, InteractivityResult<MessageReactionAddEventArgs> reactionResult)
+        /// <param name="reactionEvent"></param>
+        public async Task Result(ReactionMessage reactionMessage, InteractivityResult<MessageReactionAddEventArgs> reactionEvent)
         {
+            DateTime timestamp = DateTime.UtcNow;
+            string resultText = "Denied";
+            var emoji = new ConfirmOrDenyEmojiModel(_ctx);
             var embedBuilder = new DiscordEmbedBuilder()
-                .WithTimestamp(DateTime.UtcNow)
+                .WithTimestamp(timestamp)
                 .WithColor(DiscordColor.Red);
 
-            var reactionEmoji = new ConfirmOrDenyEmojiModel(_ctx);
-            string resultText = "Denied";
-
-            if (reactionResult.Result.Emoji == reactionEmoji.Confirmed)
+            if (reactionEvent.Result.Emoji == emoji.Confirmed)
             {
-                embedBuilder.Color = DiscordColor.Green;
                 resultText = "Confirmed";
+                embedBuilder.Color = DiscordColor.Green;
             }
 
-            string username = reactionResult.Result.User?.Username ?? "<unknown username>";
-            string footerText = $"{reactionResult.Result.Emoji} {resultText} by {username}";
+            string username = reactionEvent.Result.User?.Username ?? "<unknown username>";
+            string footerText = $"{reactionEvent.Result.Emoji} {resultText} by {username}";
             embedBuilder.WithFooter(footerText);
 
+            if (_ctx.Channel.Id != reactionMessage.Channel?.Id)
+                await SendResultsToUserDefinedChannel(embedBuilder, resultText).ConfigureAwait(false);
+
+            embedBuilder.AddField("Jump Link", $"[Original Message]({_ctx.Message.JumpLink})");
             await reactionMessage.DeleteAllReactions().ConfigureAwait(false);
             await reactionMessage.Update(embedBuilder).ConfigureAwait(false);
-
-            await SendResultResponse(embedBuilder, resultText).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -55,29 +57,30 @@ namespace Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny
         /// <param name="reactionMessage"></param>
         public async Task TimeOut(ReactionMessage reactionMessage)
         {
-            var errorEmoji = DiscordEmoji.FromName(_ctx.Client, ":no_entry:");
+            DateTime timestamp = DateTime.UtcNow;
+            DiscordEmoji errorEmoji = DiscordEmoji.FromName(_ctx.Client, ":no_entry:");
             var embedBuilder = new DiscordEmbedBuilder()
-                .WithTimestamp(DateTime.UtcNow)
+                .WithTimestamp(timestamp)
                 .WithFooter($"{errorEmoji} Request timed out")
                 .WithColor(DiscordColor.Red);
 
             await reactionMessage.DeleteAllReactions().ConfigureAwait(false);
             await reactionMessage.Update(embedBuilder).ConfigureAwait(false);
 
-            throw new InteractivityTimedOutException("Command timed out waiting for either approval or denial.");
+            throw new InteractivityTimedOutException("Command timed out. No one neither confirmed nor denied.");
         }
 
         /// <summary>
         /// Sends the reaction message result to the channel that the command was
-        /// originally executed from.
+        /// originally sent from.
         /// </summary>
         /// <param name="embed"></param>
         /// <param name="resultText"></param>
-        private async Task SendResultResponse(DiscordEmbedBuilder embed, string resultText)
+        private async Task SendResultsToUserDefinedChannel(DiscordEmbedBuilder embed, string resultText)
         {
-            embed.ClearFields()
-                 .WithTitle(null)
-                 .WithDescription($"{_ctx.User.Mention}: [Command {resultText.ToLower()}]({_ctx.Message.JumpLink})")
+            embed.WithTitle("Results")
+                 .ClearFields()
+                 .WithDescription($"{_ctx.User.Mention}: [{resultText}]({_ctx.Message.JumpLink})")
                  .Build();
 
             await _ctx.RespondAsync(embed).ConfigureAwait(false);

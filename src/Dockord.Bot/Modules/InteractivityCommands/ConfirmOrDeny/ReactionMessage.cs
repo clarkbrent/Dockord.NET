@@ -13,18 +13,17 @@ namespace Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny
     public class ReactionMessage
     {
         private readonly CommandContext _ctx;
-        private readonly string _channelName;
         private readonly List<DiscordEmoji> _reactionEmojis;
         private DiscordMessage? _reactionMessage;
 
-        public ReactionMessage(CommandContext ctx, string channelName)
+        public ReactionMessage(CommandContext ctx)
         {
             _ctx = ctx;
-            _channelName = channelName;
             _reactionEmojis = new ConfirmOrDenyEmojiModel(_ctx).ToDiscordEmojiList();
         }
 
-        public ulong Id { get; private set; }
+        public DiscordChannel? Channel { get; private set; }
+        public string Question { get; private set; } = "";
 
         /// <summary>
         /// Delete all reactions associated with instance of <see cref="ReactionMessage"/>.
@@ -41,17 +40,19 @@ namespace Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny
         /// <summary>
         /// Send an interactivity message with reactions to select from.
         /// </summary>
-        public async Task Send()
+        public async Task Send(string? channelName, string question)
         {
-            DiscordChannel channel = await GuildChannelService.Find(_ctx, _channelName).ConfigureAwait(false);
+            Channel = string.IsNullOrWhiteSpace(channelName)
+                ? _ctx.Channel
+                : await GuildChannelService.Find(_ctx, channelName).ConfigureAwait(false);
+
+            Question = question;
 
             var embedBuilder = new DiscordEmbedBuilder()
                 .WithTitle("Choose:")
-                .WithDescription("Confirm or deny?")
-                .AddField("Jump Link", $"[Original Message]({_ctx.Message.JumpLink})");
+                .WithDescription(Question);
 
-            _reactionMessage = await channel.SendMessageAsync(embed: embedBuilder).ConfigureAwait(false);
-            Id = _reactionMessage.Id;
+            _reactionMessage = await Channel.SendMessageAsync(embed: embedBuilder).ConfigureAwait(false);
 
             foreach (var emoji in _reactionEmojis) // Attach all reaction emojis to the message
             {
@@ -70,8 +71,7 @@ namespace Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny
                 throw new InvalidOperationException("Could not find the reaction message.");
 
             embedBuilder.WithTitle("Choose:")
-                        .WithDescription("Confirm or deny?")
-                        .AddField("Jump Link", $"[Original Message]({_ctx.Message.JumpLink})");
+                        .WithDescription(Question);
 
             await _reactionMessage.ModifyAsync(embed: embedBuilder.Build()).ConfigureAwait(false);
         }
@@ -87,13 +87,13 @@ namespace Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny
             if (_reactionMessage == null)
                 throw new InvalidOperationException("Could not find the reaction message.");
 
-            var interactivity = _ctx.Client.GetInteractivity();
+            InteractivityExtension interactivity = _ctx.Client.GetInteractivity();
 
             return await interactivity.WaitForReactionAsync(x =>
                 !x.User.IsBot
                 && x.Message.Id == _reactionMessage.Id
                 && _reactionEmojis.Contains(x.Emoji),
-                timeoutoverride: TimeSpan.FromMilliseconds(delay)).ConfigureAwait(false);
+                timeoutoverride: TimeSpan.FromSeconds(delay)).ConfigureAwait(false);
         }
     }
 }

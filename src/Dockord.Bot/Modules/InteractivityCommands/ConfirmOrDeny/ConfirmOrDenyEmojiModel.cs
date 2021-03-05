@@ -15,6 +15,9 @@ namespace Dockord.Bot.Modules.InteractivityCommands.ConfirmOrDeny
         public DiscordEmoji Confirmed { get; }
         public DiscordEmoji Denied { get; }
 
+        /// <summary>
+        /// Create a list of <see cref="DiscordEmoji"/>s that contains each of <see cref="ConfirmOrDenyEmojiModel"/>'s <see cref="DiscordEmoji"/> properties.
+        /// </summary>
         public List<DiscordEmoji> ToDiscordEmojiList()
         {
             var emojiList = new List<DiscordEmoji>();
