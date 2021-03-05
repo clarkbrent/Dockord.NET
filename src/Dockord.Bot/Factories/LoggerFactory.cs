@@ -2,13 +2,13 @@
 using Serilog;
 using System;
 
-namespace Dockord.Bot
+namespace Dockord.Bot.Factories
 {
-    internal static class DockordBotLogger
+    internal static class LoggerFactory
     {
         public static ILogger Create()
         {
-            IDockordBotConfig config = DockordBotConfig.Get();
+            IConfigService config = ConfigService.Get();
 
             var loggerConfig = new LoggerConfiguration()
                 .ReadFrom.Configuration(config.GetSerilogSection())

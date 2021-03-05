@@ -4,9 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace Dockord.Bot
+namespace Dockord.Bot.Factories
 {
-    internal static class DockordBotHost
+    internal static class HostFactory
     {
         /// <summary>
         /// Creates a project specific <see cref="IHost"/>.
@@ -19,9 +19,9 @@ namespace Dockord.Bot
             Host.CreateDefaultBuilder()
                 .ConfigureServices((services) =>
                 {
-                    services.AddSingleton<IDockordBotConfig>(DockordBotConfig.Get());
+                    services.AddSingleton<IConfigService>(ConfigService.Get());
                     services.AddSingleton<IDiscordConfigService, DiscordConfigService>();
-                    services.AddSingleton<IDockordBotService, DockordBotService>();
+                    services.AddSingleton<IBotService, BotService>();
                     services.AddSingleton<IDiscordEventService, DiscordEventService>();
 
                     services.AddTransient<IClientEventHandler, ClientEventHandler>();

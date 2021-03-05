@@ -15,12 +15,12 @@ namespace Dockord.Bot.Events
 {
     public class CommandEventHandler : ICommandEventHandler
     {
-        private readonly IDockordBotConfig _config;
+        private readonly IConfigService _config;
         private string? _commandArgs;
         private string? _commandName;
         private bool? _isDirectMessage;
 
-        public CommandEventHandler(IDockordBotConfig config)
+        public CommandEventHandler(IConfigService config)
         {
             _config = config;
         }

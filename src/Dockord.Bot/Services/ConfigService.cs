@@ -9,12 +9,12 @@ namespace Dockord.Bot.Services
     /// <summary>
     /// Creates a singleton that stores strongly typed values from <see cref="IConfiguration"/>.
     /// </summary>
-    internal sealed class DockordBotConfig : IDockordBotConfig
+    internal sealed class ConfigService : IConfigService
     {
-        private static readonly DockordBotConfig _instance = new DockordBotConfig();
+        private static readonly ConfigService _instance = new ConfigService();
         private readonly IConfiguration _config;
 
-        private DockordBotConfig()
+        private ConfigService()
         {
             _config = Create();
 
@@ -28,7 +28,7 @@ namespace Dockord.Bot.Services
         public SectionBotSettings BotSettings { get; } = new SectionBotSettings();
         public SectionSerilog Serilog { get; } = new SectionSerilog();
 
-        public static DockordBotConfig Get()
+        public static ConfigService Get()
         {
             return _instance;
         }
@@ -74,7 +74,7 @@ namespace Dockord.Bot.Services
         }
     }
 
-    public interface IDockordBotConfig
+    public interface IConfigService
     {
         SectionBotSettings BotSettings { get; }
         SectionSerilog Serilog { get; }

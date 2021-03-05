@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Dockord.Bot.Services
 {
-    public class DockordBotService : IDockordBotService
+    public class BotService : IBotService
     {
-        private readonly ILogger<DockordBotService> _logger;
+        private readonly ILogger<BotService> _logger;
         private readonly IDiscordConfigService _discordConfig;
         private readonly IDiscordEventService _eventService;
 
-        public DockordBotService(ILogger<DockordBotService> logger, IDiscordEventService eventService, IDiscordConfigService discordConfig)
+        public BotService(ILogger<BotService> logger, IDiscordEventService eventService, IDiscordConfigService discordConfig)
         {
             _logger = logger;
             _eventService = eventService;
@@ -67,7 +67,7 @@ namespace Dockord.Bot.Services
     }
 
     /// <summary>Initializes a DSharpPlus Discord client, and it's commands.</summary>
-    public interface IDockordBotService
+    public interface IBotService
     {
         DiscordClient Client { get; }
         CommandsNextExtension Commands { get; }

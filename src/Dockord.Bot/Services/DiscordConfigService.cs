@@ -13,10 +13,10 @@ namespace Dockord.Bot.Services
     /// </summary>
     public class DiscordConfigService : IDiscordConfigService
     {
-        private readonly IDockordBotConfig _config;
+        private readonly IConfigService _config;
         private readonly IServiceProvider _services;
 
-        public DiscordConfigService(IDockordBotConfig config, IServiceProvider services)
+        public DiscordConfigService(IConfigService config, IServiceProvider services)
         {
             _config = config;
             _services = services;

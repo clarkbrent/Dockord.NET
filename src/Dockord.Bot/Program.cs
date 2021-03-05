@@ -1,3 +1,4 @@
+using Dockord.Bot.Factories;
 using Dockord.Bot.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,16 +15,16 @@ namespace Dockord.Bot
             string nameSpace = typeof(Program).Namespace!;
             string appName = nameSpace[(nameSpace.LastIndexOf('.', nameSpace.LastIndexOf('.') - 1) + 1)..];
 
-            Log.Logger = DockordBotLogger.Create();
+            Log.Logger = LoggerFactory.Create();
 
             try
             {
                 Log.Information($"Configuring app ({{{nameof(appName)}}})...", appName);
 
-                IHost host = DockordBotHost.Create()
+                IHost host = HostFactory.Create()
                     ?? throw new InvalidOperationException("An error occured while configuring the host.");
 
-                IDockordBotService bot = host.Services.GetService<IDockordBotService>()
+                IBotService bot = host.Services.GetService<IBotService>()
                     ?? throw new InvalidOperationException("Bot service could not be found.");
 
                 await bot.RunAsync().ConfigureAwait(false);
