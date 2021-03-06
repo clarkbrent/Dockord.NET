@@ -4,6 +4,6 @@
     {
         string? UserDiscriminator { get; set; }
         ulong? UserId { get; set; }
-        string? Username { get; set; }
+        string Username { get; set; }
     }
 }

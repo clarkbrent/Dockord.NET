@@ -22,7 +22,7 @@ namespace Dockord.Bot.Events
         {
             var clientEventModel = new ClientEventModel
             {
-                Username = client.CurrentUser?.Username,
+                Username = client.CurrentUser.Username,
                 UserDiscriminator = client.CurrentUser?.Discriminator,
                 UserId = client.CurrentUser?.Id,
             };

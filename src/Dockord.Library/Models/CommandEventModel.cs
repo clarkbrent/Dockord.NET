@@ -4,18 +4,25 @@
     /// A model of properties that store the values of various Discord command events.
     /// </summary>
     /// <remarks>
+    /// <para>
     /// The order that <see cref="CommandEventModel"/>'s public properties are defined
     /// determines the order in which log template <see cref="string"/> parameters <br />
     /// are generated using <see cref="Extensions.DiscordEventExtensions.ToEventLogTuple"/>.
+    /// </para>
+    /// <para>
+    /// <see cref="CommandName"/> should not have a null or whitespace value.
+    /// </para>
     /// </remarks>
     public class CommandEventModel : DiscordEventBase, ICommandEventModel
     {
-        private string _commandName = "";
+        private string _commandName = "<unknown command>";
 
-        public string? CommandName
+        public string CommandName
         {
             get => _commandName;
-            set => _commandName = value ?? "<unknown command>";
+            set => _commandName = string.IsNullOrWhiteSpace(value)
+                ? "<unknown command>"
+                : value;
         }
 
         public string? CommandArgs { get; set; }

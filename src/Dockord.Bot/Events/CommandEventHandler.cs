@@ -17,7 +17,7 @@ namespace Dockord.Bot.Events
     {
         private readonly IConfigService _config;
         private string? _commandArgs;
-        private string? _commandName;
+        private string _commandName = "";
         private bool? _isDirectMessage;
 
         public CommandEventHandler(IConfigService config)
@@ -39,7 +39,7 @@ namespace Dockord.Bot.Events
         public async Task CommandErrored(CommandsNextExtension sender, CommandErrorEventArgs e)
         {
             _commandArgs = e.Context.RawArgumentString;
-            _commandName = e.Command?.Name;
+            _commandName = e.Command.Name;
             _isDirectMessage = e.Context.Channel?.IsPrivate;
             EventId eventId = DockordEventId.BotCmdError;
             string eventMessage = "Error executing command.";
@@ -92,7 +92,7 @@ namespace Dockord.Bot.Events
             {
                 CommandName = _commandName,
                 CommandArgs = _commandArgs,
-                Username = e.Context.User?.Username,
+                Username = e.Context.User.Username,
                 UserDiscriminator = e.Context.User?.Discriminator,
                 UserId = e.Context.User?.Id,
                 ChannelName = e.Context.Channel?.Name,
