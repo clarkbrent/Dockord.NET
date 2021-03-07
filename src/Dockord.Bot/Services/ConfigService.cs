@@ -9,13 +9,17 @@ namespace Dockord.Bot.Services
     /// <summary>
     /// Creates a singleton that stores strongly typed values from <see cref="IConfiguration"/>.
     /// </summary>
-    internal sealed class ConfigService : IConfigService
+    public sealed class ConfigService : IConfigService
     {
-        private static readonly ConfigService _instance = new ConfigService();
+        private static IConfigService _instance;
         private readonly IConfiguration _config;
+        private static readonly object _lockObject = new object();
 
         private ConfigService()
         {
+            if (_instance != null)
+                throw new InvalidOperationException("Use Get() method to get an instance of this class.");
+
             _config = Create();
 
             _config.GetSection(nameof(BotSettings))
@@ -28,8 +32,16 @@ namespace Dockord.Bot.Services
         public SectionBotSettings BotSettings { get; } = new SectionBotSettings();
         public SectionSerilog Serilog { get; } = new SectionSerilog();
 
-        public static ConfigService Get()
+        public static IConfigService Get()
         {
+            if (_instance == null)
+            {
+                lock (_lockObject) // Create thread safe singleton
+                {
+                    _instance = new ConfigService();
+                }
+            }
+
             return _instance;
         }
 
