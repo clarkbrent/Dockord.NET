@@ -341,3 +341,6 @@ healthchecksdb
 
 # docker-compose dev override
 docker-compose.dev.yml
+
+# appsettings
+appsettings.Production.json

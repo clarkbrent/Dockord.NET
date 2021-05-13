@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
@@ -7,16 +6,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		..\.gitattributes = ..\.gitattributes
 		..\.gitignore = ..\.gitignore
+		LICENSE = LICENSE
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebClients", "WebClients", "{7FA288C1-8408-4902-A93A-A8F0ECF043B8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dockord", "Dockord", "{E2B62374-6667-4829-A7D2-A6BE90F50B2C}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{1489ACA1-D426-4F27-B078-D6914E387F24}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dockord.Bot", "WebClients\Dockord\Dockord.Bot\Dockord.Bot.csproj", "{D14A815E-720B-4AF1-B142-75766349B65E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dockord.Bot", "Dockord.Bot\Dockord.Bot.csproj", "{514BBC10-A131-431F-8520-7045DEF18B87}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dockord.Library", "Dockord.Library\Dockord.Library.csproj", "{0A465FC4-D13B-425B-88D8-527AEEEC7879}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{DB1B0E02-B589-4128-A667-09FBCD91828E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dockord.Library.UnitTests", "..\tests\Dockord.Library.Tests\Dockord.Library.UnitTests.csproj", "{2266B478-7834-4779-AA95-3B4F4BFFFCC2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dockord.Bot.UnitTests", "..\tests\Dockord.Bot.Tests\Dockord.Bot.UnitTests.csproj", "{20899E2B-C31A-4610-A2C9-57564E98F690}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,17 +32,29 @@ Global
 		{1489ACA1-D426-4F27-B078-D6914E387F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1489ACA1-D426-4F27-B078-D6914E387F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1489ACA1-D426-4F27-B078-D6914E387F24}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D14A815E-720B-4AF1-B142-75766349B65E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D14A815E-720B-4AF1-B142-75766349B65E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D14A815E-720B-4AF1-B142-75766349B65E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D14A815E-720B-4AF1-B142-75766349B65E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{514BBC10-A131-431F-8520-7045DEF18B87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{514BBC10-A131-431F-8520-7045DEF18B87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{514BBC10-A131-431F-8520-7045DEF18B87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{514BBC10-A131-431F-8520-7045DEF18B87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A465FC4-D13B-425B-88D8-527AEEEC7879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A465FC4-D13B-425B-88D8-527AEEEC7879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A465FC4-D13B-425B-88D8-527AEEEC7879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A465FC4-D13B-425B-88D8-527AEEEC7879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2266B478-7834-4779-AA95-3B4F4BFFFCC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2266B478-7834-4779-AA95-3B4F4BFFFCC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2266B478-7834-4779-AA95-3B4F4BFFFCC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2266B478-7834-4779-AA95-3B4F4BFFFCC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20899E2B-C31A-4610-A2C9-57564E98F690}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20899E2B-C31A-4610-A2C9-57564E98F690}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20899E2B-C31A-4610-A2C9-57564E98F690}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20899E2B-C31A-4610-A2C9-57564E98F690}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E2B62374-6667-4829-A7D2-A6BE90F50B2C} = {7FA288C1-8408-4902-A93A-A8F0ECF043B8}
-		{D14A815E-720B-4AF1-B142-75766349B65E} = {E2B62374-6667-4829-A7D2-A6BE90F50B2C}
+		{2266B478-7834-4779-AA95-3B4F4BFFFCC2} = {DB1B0E02-B589-4128-A667-09FBCD91828E}
+		{20899E2B-C31A-4610-A2C9-57564E98F690} = {DB1B0E02-B589-4128-A667-09FBCD91828E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8D6618B6-FE28-425F-8F88-61F461427A44}
