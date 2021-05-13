@@ -25,7 +25,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\src\Dockord.Bot\Dockord.Bot.csproj" />
+	  <ProjectReference Include="..\..\src\Dockord.Bot\Dockord.Bot.csproj" />
 	</ItemGroup>
 
 </Project>

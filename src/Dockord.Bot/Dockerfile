@@ -5,10 +5,10 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster AS build
 WORKDIR /src
-COPY ["WebClients/Dockord/Dockord.Bot/Dockord.Bot.csproj", "WebClients/Dockord/Dockord.Bot/"]
-RUN dotnet restore "WebClients/Dockord/Dockord.Bot/Dockord.Bot.csproj"
+COPY ["Dockord.Bot/Dockord.Bot.csproj", "Dockord.Bot/"]
+RUN dotnet restore "Dockord.Bot/Dockord.Bot.csproj"
 COPY . .
-WORKDIR "/src/WebClients/Dockord/Dockord.Bot"
+WORKDIR "/src/Dockord.Bot"
 RUN dotnet build "Dockord.Bot.csproj" -c Release -o /app/build
 
 FROM build AS publish
