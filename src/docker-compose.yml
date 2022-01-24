@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockord.Bot/Dockerfile
-      
+ 
   seq:
+    container_name: Dockord.Seq
     image: datalust/seq:latest

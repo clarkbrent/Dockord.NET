@@ -1,21 +1,17 @@
 version: '3.4'
 services:
   dockordbot:
-    tty: true
+    image: ${DOCKER_REGISTRY-}dockordbot.tests
+    build:
+      context: .
+      dockerfile: Unittests.Dockerfile
+      target: tests
     environment:
       - DOTNET_ENVIRONMENT=Development
       - Serilog__MinimumLevel__Default=Debug
       - Serilog__SeqUrl=http://seq
       - BotSettings__AlwaysCacheMembers=true
-      - BotSettings__ErrorMessageDeleteSecondsDelay=15
+      - BotSettings__ErrorMessageDeleteSecondsDelay=5
       - BotSettings__MessageCacheSize=1024
       - BotSettings__Prefix=!
       - BotSettings__Token=
-    depends_on:
-        - seq
-        
-  seq:
-    environment:
-      - ACCEPT_EULA=Y
-    ports:
-      - "5340:80" 
