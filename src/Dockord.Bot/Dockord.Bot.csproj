@@ -8,7 +8,7 @@
 		<RootNamespace>Dockord.Bot</RootNamespace>
 		<Nullable>enable</Nullable>
 		<OutputType>Exe</OutputType>
-		<DockerfileContext>..\..\..</DockerfileContext>
+		<DockerfileContext>.</DockerfileContext>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
 	</PropertyGroup>
@@ -39,9 +39,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DSharpPlus" Version="4.2.0-nightly-01063" />
-		<PackageReference Include="DSharpPlus.CommandsNext" Version="4.2.0-nightly-01063" />
-		<PackageReference Include="DSharpPlus.Interactivity" Version="4.2.0-nightly-01063" />
+		<PackageReference Include="DSharpPlus" Version="4.1.0" />
+		<PackageReference Include="DSharpPlus.CommandsNext" Version="4.1.0" />
+		<PackageReference Include="DSharpPlus.Interactivity" Version="4.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />

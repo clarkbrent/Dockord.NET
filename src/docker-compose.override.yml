@@ -1,6 +1,7 @@
-﻿version: '3.4'
+version: '3.4'
 services:
   dockordbot:
+    tty: true
     environment:
       - DOTNET_ENVIRONMENT=Development
       - Serilog__MinimumLevel__Default=Debug
@@ -17,5 +18,4 @@ services:
     environment:
       - ACCEPT_EULA=Y
     ports:
-      - "5340:80"
-      
+      - "5340:80" 

@@ -3,7 +3,7 @@
 FROM mcr.microsoft.com/dotnet/runtime:6.0-bullseye-slim AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0-bullseye-slim AS build
 WORKDIR /src
 COPY ["Dockord.Bot/Dockord.Bot.csproj", "Dockord.Bot/"]
 RUN dotnet restore "Dockord.Bot/Dockord.Bot.csproj"

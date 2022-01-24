@@ -14,6 +14,7 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.console" Version="2.4.1">
 		  <PrivateAssets>all</PrivateAssets>
@@ -26,7 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\Dockord.Library\Dockord.Library.csproj" />
+	  <ProjectReference Include="..\..\Dockord.Library\Dockord.Library.csproj" />
 	</ItemGroup>
 
 </Project>

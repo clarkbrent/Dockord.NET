@@ -13,8 +13,9 @@ variables have the highest priority over other configuration files.
 * **IMPORTANT**: Make sure to add the Discord bot's token to either the `BotSettings__Token` environment variable or
 the `Token` key in the `appsettings.Development.json` file otherwise the bot will fail to start.
 
-4. Once all the services are running, you can access the bot's logs on the [local Seq instance](http://localhost:5340/).
+4. Once all the services are running, you can access the bot's logs on the [local Seq instance](http://localhost:5340/) on port 5340 by default.
 
+---
 ### Example Commands
 ##### confirmordeny
 The `confirmordeny` command allows you to gamify a question (Optionally to a different channel). Multiword sentences 
@@ -24,10 +25,18 @@ for the question to be answered.
 !confirmordeny <question> [channelName] [delay]
 ```
 
-
 ##### deletemessages
 The `deletemessages` command deletes the number of messages specified from the channel it is sent to. This command 
 requires owner permissions.
 ```
 !deletemessages [limit]
 ```
+
+---
+### Run Unit Tests
+The command to manually run Dockerized unit tests:
+```
+docker-compose -f docker-compose.tests.yml build --no-cache
+```
+
+Otherwise, you can target the "tests" stage in `Unittests.Dockerfile`.
