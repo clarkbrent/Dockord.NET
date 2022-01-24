@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net5.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<UserSecretsId>9b527d4e-2a43-4472-ac01-54031fce1d02</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<AssemblyName>Dockord.Bot</AssemblyName>
@@ -10,7 +10,7 @@
 		<OutputType>Exe</OutputType>
 		<DockerfileContext>..\..\..</DockerfileContext>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<AnalysisLevel>5.0</AnalysisLevel>
+		<AnalysisLevel>latest</AnalysisLevel>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -39,18 +39,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DSharpPlus" Version="4.0.1" />
-		<PackageReference Include="DSharpPlus.CommandsNext" Version="4.0.1" />
-		<PackageReference Include="DSharpPlus.Interactivity" Version="4.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-		<PackageReference Include="Serilog.Enrichers.Environment" Version="2.1.3" />
-		<PackageReference Include="Serilog.Enrichers.Process" Version="2.0.1" />
+		<PackageReference Include="DSharpPlus" Version="4.2.0-nightly-01063" />
+		<PackageReference Include="DSharpPlus.CommandsNext" Version="4.2.0-nightly-01063" />
+		<PackageReference Include="DSharpPlus.Interactivity" Version="4.2.0-nightly-01063" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+		<PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
+		<PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
 		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
-		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.1.2" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-		<PackageReference Include="Serilog.Sinks.Seq" Version="5.0.1" />
-		<PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+		<PackageReference Include="Serilog.Extensions.Hosting" Version="4.2.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+		<PackageReference Include="Serilog.Sinks.Seq" Version="5.1.1" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
